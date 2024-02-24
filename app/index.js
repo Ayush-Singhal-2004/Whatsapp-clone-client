@@ -1,8 +1,9 @@
-import { View } from "react-native";
-import Home from "./home";
+import { View, Text } from "react-native";
 
 export default function Page() {
   return (
-    <Home />
+    <View>
+      <Text>123</Text>
+    </View>
   );
 }
