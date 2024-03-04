@@ -1,9 +1,11 @@
-import { View, Text } from "react-native";
+import { View } from "react-native";
+import Welcome from "./Auth/welcome";
 
 export default function Page() {
+
   return (
     <View>
-      <Text>123</Text>
+      <Welcome />
     </View>
   );
 }
