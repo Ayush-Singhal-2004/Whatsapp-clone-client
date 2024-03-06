@@ -1,7 +1,7 @@
 import { View, Text, StyleSheet, Dimensions, TextInput, TouchableOpacity } from "react-native";
-
-import { useState } from "react";
+import { useRef, useState } from "react";
 import axios from "axios";
+import { router } from "expo-router";
 
 const screenHeight = Dimensions.get("window").height;
 const screenWidth = Dimensions.get("window").width;
@@ -11,6 +11,7 @@ export default function Login() {
     const [phoneNumber, setPhoneNumber] = useState("");
     const [email, setEmail] = useState("");
     const [isError, setIsError] = useState(false);
+    const [errorMessage, setErrorMessage] = useState("")
 
     const handleSubmit = async() => {
         const phoneRegex = /^[0-9]{10}$/;
@@ -18,14 +19,25 @@ export default function Login() {
         if(phoneRegex.test(phoneNumber) && emailRegex.test(email))
         {
             setIsError(false);
-            const response = await axios.post("http://192.168.229.79:3001/email/send-email", {
+            let response = await axios.post("http://192.168.229.79:3001/email/send-email", {
                 "phoneNumber" : phoneNumber,
                 "email" : email
             })
-            console.log(response);
+            response = response.data;
+            if(response.status == 250)
+            {
+                router.replace({pathname : './verifyOtp', params : {otp : response.data}})
+            }
+            else
+            {
+                setErrorMessage("Retry!!");
+                setIsError(true);
+                setPhoneNumber("");
+                setEmail("");
+            }
             return
         }
-        console.log("Invalid phone or email");
+        setErrorMessage("Invalid phone or email!!");
         setIsError(true);
     };
 
@@ -77,7 +89,7 @@ export default function Login() {
                 </View>
                 {
                     isError ?
-                    <Text style={{color: "#ff6b7a"}}>Invalid phone or email!!</Text>
+                    <Text style={{color: "#ff6b7a"}}>{errorMessage}</Text>
                     : <View></View>
                 }
                 <View style={{position: "absolute", bottom : 10}}>
