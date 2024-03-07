@@ -1,7 +1,8 @@
 import { View, Text, StyleSheet, Dimensions, TextInput, TouchableOpacity } from "react-native";
-import { useRef, useState } from "react";
+import { useState } from "react";
 import axios from "axios";
 import { router } from "expo-router";
+import Loading from "../../assets/loader";
 
 const screenHeight = Dimensions.get("window").height;
 const screenWidth = Dimensions.get("window").width;
@@ -11,13 +12,17 @@ export default function Login() {
     const [phoneNumber, setPhoneNumber] = useState("");
     const [email, setEmail] = useState("");
     const [isError, setIsError] = useState(false);
-    const [errorMessage, setErrorMessage] = useState("")
+    const [errorMessage, setErrorMessage] = useState("");
+    const [loading, setLoading] = useState(false);
 
     const handleSubmit = async() => {
+        setPhoneNumber(phoneNumber.trim());
+        setEmail(email.trim());
         const phoneRegex = /^[0-9]{10}$/;
         const emailRegex = /^[a-zA-Z0-9]{5,}[@]{1}[a-z]{3,}[.]{1}[a-z]{2,}$/;
         if(phoneRegex.test(phoneNumber) && emailRegex.test(email))
         {
+            setLoading(true);
             setIsError(false);
             let response = await axios.post("http://192.168.229.79:3001/email/send-email", {
                 "phoneNumber" : phoneNumber,
@@ -26,7 +31,10 @@ export default function Login() {
             response = response.data;
             if(response.status == 250)
             {
-                router.replace({pathname : './verifyOtp', params : {otp : response.data}})
+                router.replace({pathname : './verifyOtp', params : {
+                    otp : response.data,
+                    phoneNumber : phoneNumber
+                }})
             }
             else
             {
@@ -43,6 +51,9 @@ export default function Login() {
 
     return (
         <View style={styles.main}>
+            {
+                loading ? <Loading /> : <></>
+            }
             <View style={styles.container}>
                 <View style={styles.enterMessage}>
                     <Text

@@ -1,4 +1,4 @@
-import { useLocalSearchParams } from "expo-router";
+import { useLocalSearchParams, router } from "expo-router";
 import { useEffect, useState } from "react";
 import { View, Text, StyleSheet, Dimensions, TextInput } from "react-native";
 
@@ -7,13 +7,17 @@ const screenWidth = Dimensions.get("window").width;
 
 export default function VerifyOTP() {
 
-    const otp = useLocalSearchParams().otp;
+    const userData = useLocalSearchParams();
+    const otp = userData.otp;
+
     const [userCode, setUserCode] = useState("");
 
     useEffect(() => {
         if(userCode.length == 6 && userCode == otp)
         {
-            console.log("MATCH");
+            router.replace({pathname:"./profileInfo", params:{
+                phoneNumber : userData.phoneNumber
+            }});
         }
     }, [userCode]);
 
