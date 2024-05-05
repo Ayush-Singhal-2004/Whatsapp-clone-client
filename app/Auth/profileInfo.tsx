@@ -11,8 +11,8 @@ const screenWidth = Dimensions.get("window").width;
 
 export default function ProfileInfo() {
 
-    const [image, setImage] = useState(img);
-    const [name, setName] = useState("");
+    const [image, setImage] = useState<string>(img);
+    const [name, setName] = useState<string>("");
 
     const userData = useLocalSearchParams();
 

@@ -3,6 +3,8 @@ import { Image } from 'expo-image'
 import { Linking } from "react-native";
 import { Link } from "expo-router";
 
+const logo = require("../../assets/welcome_page_logo.jpeg")
+
 const screenHeight = Dimensions.get("window").height;
 const screenWidth = Dimensions.get("window").width;
 
@@ -32,7 +34,7 @@ export default function Welcome() {
             <View>
                     <Image 
                     style={styles.image}
-                    source="https://media.tenor.com/smTUWQhZc-gAAAAe/whatsapp-gif.png"
+                    source={logo}
                     />
             </View>
             <View style={{marginBottom: 100}}>
@@ -42,11 +44,19 @@ export default function Welcome() {
                 </Text>
             </View>
             <TouchableOpacity 
-            style={styles.button} 
-            activeOpacity={0.8} 
+                style={styles.button} 
+                activeOpacity={0.8} 
             >
-                <Link href="/Auth/login" asChild>
-                    <Text style={{color: "#101D24", fontWeight: "500"}}>Agree and continue</Text>
+                {/* <Link href="/Auth/login"> */}
+                <Link href="/MainApp">
+                    <Text 
+                        style={{
+                            color: "#101D24",
+                            fontWeight: "500",
+                        }}
+                    >
+                        Agree and continue
+                    </Text>
                 </Link>
             </TouchableOpacity>
            </View>
